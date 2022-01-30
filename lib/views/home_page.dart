@@ -15,21 +15,18 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text("Story App"),
         ),
-        body: Builder(builder:(context) =>  OutlinedButton(
-              onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-          content: Text('A SnackBar has been shown.'),
-          ),
-          );
-          },
+        body: Builder(
+          builder: (context) => OutlinedButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('A SnackBar has been shown.'),
+                ),
+              );
+            },
             child: const Text('Show SnackBar'),
           ),
-          ),
-
-
-
-
+        ),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
