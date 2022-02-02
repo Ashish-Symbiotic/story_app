@@ -36,8 +36,8 @@ class _AttendenceState extends State<Attendence> {
             if (snapshot.connectionState == ConnectionState.waiting)
              {
                print(snapshot);
-               return  Center(
-                 child: const CircularProgressIndicator(color: Colors.black,
+               return  const Center(
+                 child: CircularProgressIndicator(color: Colors.black,
                  backgroundColor: Colors.amber,),
                );}
             else
@@ -64,6 +64,10 @@ class _AttendenceState extends State<Attendence> {
     return  ListTile(
       title: Text(notes.title),
       subtitle: Text(notes.desc),
+      shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      onLongPress: (){
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(notes.id.toString())));
+      },
     );
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_app/views/attandance.dart';
+import 'package:story_app/views/mark_attandance.dart';
 
 
 void main() {
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home:  Attendence(),
+      home:  Mark_Attandance(),
     );
   }
 }
