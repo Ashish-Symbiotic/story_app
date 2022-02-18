@@ -34,15 +34,15 @@ class DatabaseService {
 
   FutureOr<void> _onCreate(Database db, int version) {
     db.execute(
-        'CREATE TABLE notes(id INTEGER PRIMARY KEY,title TEXT, desc TEXT)');
+        'CREATE TABLE notes(id INTEGER PRIMARY KEY,date TEXT, desc TEXT,type TEXT)');
   }
 
-  Future<void> insertNote(Notes notes) async {
+  Future<int> insertNote(Notes notes) async {
     final db = await _databaseService.database;
       //
-
-    await db.insert('notes', notes.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    int status=await db.insert('notes', notes.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);;
+    return status ;
   }
 
   Future<List<Notes>> notes() async {
@@ -52,10 +52,22 @@ class DatabaseService {
 
     return List.generate(maps.length, (index) => Notes.fromMap(maps[index]));
   }
-  void insert() {
-    //final db = await _databaseService.database;
-    insertNote(Notes(title:"Ashish",desc: "Qwerty"));
 
-    print("Hello");
+
+  void insertNotes(){
+   Notes n = Notes(date: "12-20-2000", desc: "Class", type: "Guitar class");
+   for(int i=0;i<50000;i++) {
+     insertNote(n);
+   }
+  }
+
+
+  Future<List<Notes>> notesWithDistinctId() async {
+    final db = await _databaseService.database;
+
+    //final List<Map<String, dynamic>> maps = await db.query('notes',where: 'id = ?',whereArgs: [Id]);
+    final List<Map<String, dynamic>> maps = await db.rawQuery("Select Distinct type from notes");
+
+    return List.generate(maps.length, (index) => Notes.fromMap(maps[index]));
   }
 }
