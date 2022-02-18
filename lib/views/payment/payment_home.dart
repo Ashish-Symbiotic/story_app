@@ -15,12 +15,11 @@ class _PaymentHomeState extends State<PaymentHome> {
 TextEditingController nameCon = new TextEditingController();
 TextEditingController totalAmtCon =new  TextEditingController();
 TextEditingController paidCon = new TextEditingController();
-TextEditingController balCon = new TextEditingController();
+//TextEditingController balCon = new TextEditingController();
 TextEditingController descCon = new TextEditingController();
 TextEditingController dateTimeController = TextEditingController();
 var dateFormat = DateFormat("dd-MM-yyyy");
-
-
+String textValue="";
 
 
 
@@ -36,6 +35,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String payType="";
 
 
+  DateTime selectedDate = DateTime.now();
 
 
   PaymentType? _paymentType = PaymentType.Give;
@@ -43,6 +43,7 @@ bool borrowField = false;
 
   @override
   Widget build(BuildContext context) {
+    dateTimeController.clear();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -163,44 +164,28 @@ bool borrowField = false;
                     enabled: !borrowField,
                     controller: paidCon,
                     validator: (value){
-                      if(value!.isEmpty)
+                      if(borrowField == false && value!.isEmpty)
                       {
+                       // paidCon.text=bal.toString();
                         return "Please Enter data";
                       }
+
                     },
                     onFieldSubmitted: (value){
                       paidCon.text = value.toString();
-                      _showBal(paidCon.text);
+                      _showBal();
                     },
                   ),
                 SizedBox(
                   height: 10,
 
                 ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: "Balance",
-                      contentPadding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                      labelStyle: TextStyle(letterSpacing: 0,fontWeight: FontWeight.w200),
-                      border: new OutlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.teal),
-                          borderRadius: BorderRadius.circular(10)),
-
-                    ),
-                    enabled: false,
-                    controller: balCon,
-                    validator: (value){
-                      if(value!.isEmpty)
-                      {
-                        return "Please Enter data";
-                      }
-                    },
-                    onFieldSubmitted: (value){
-                      balCon.text = value.toString();
-                    },
-
-
+                  Container(
+                    child: Text(bal.toString().isEmpty ? "Balance" : "Balance : "+bal.toString()),
                   ),
+
+
+
                   SizedBox(
                     height: 10,
 
@@ -228,7 +213,7 @@ bool borrowField = false;
                       descCon.text = value.toString();
                     },
                     onTap: (){
-                      _showBal(paidCon.text);
+                      _showBal();
                     },
 
                   ),
@@ -239,57 +224,54 @@ bool borrowField = false;
                   ListTile(
                     title: Text(dateTimeController.text.isEmpty ? "Choose Date" : dateTimeController.text.toString()),
                     leading: Icon(Icons.date_range),
-                    onTap:(){
-                      PhysicalKeyboardKey.close;
-                      showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(DateTime.now().year),
-                        lastDate: DateTime.now(),
-                      ).then((value) => {
-                        print(value),
-                        setState(() {
-                          dateTimeController.text = dateFormat.format(value!).toString();
-                        })
-                      });
-                    },
+                    onTap:()=>_selectDate(context)
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  InkWell(
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(color: Colors.pinkAccent,borderRadius: BorderRadius.circular(5)),
-                      alignment: Alignment.center,
+                  GestureDetector(
+                    child: InkWell(
+                        child: Container(
+                          height: 40,
+                          width: 100,
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(color: Colors.pinkAccent,borderRadius: BorderRadius.circular(5)),
+                          alignment: Alignment.center,
 
-                        child: Text("Save",style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                          child: Text("Save",style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
 
-                        ),),
+                          ),),
 
-                      ),
+                        ),
 
-                      onTap: () {
+                        onTap: () {
 
-                       if(_formKey.currentState!.validate()){
-                       //  print("Wrong data");
-                         name = nameCon.text.toString();
-                         totalamt = int.parse(totalAmtCon.text.toString());
-                         payType = _paymentType.toString();
-                         bal = int.parse(balCon.text.toString());
-                         paid = int.parse(paidCon.text.toString());
-                         date = dateTimeController.text.toString();
-                         desc = descCon.text.toString();
+                          if(_formKey.currentState!.validate()){
+                            //  print("Wrong data");
+                           setState(() {
+                             name = nameCon.text.toString();
+                             totalamt = int.parse(totalAmtCon.text.toString());
+                             payType = _paymentType.toString();
+                             // bal = int.parse(balCon.text.toString());
+                             if(borrowField== true)
+                             {
+                               paid=0;
+                             }
+                             else{
+                               paid = int.parse(paidCon.text.toString());
+                             }
 
-                         print(name+date+desc+paid.toString()+bal.toString()+payType+totalamt.toString());
-                       }
-                       else{
-                        print("Wrong data");
-                         /*name = nameCon.text.toString();
+                             date = dateTimeController.text.toString();
+                             desc = descCon.text.toString();
+                           });
+
+                            print(name+date+desc+paid.toString()+bal.toString()+payType+totalamt.toString());
+                          }
+                          else{
+                            print("Wrong data");
+                            /*name = nameCon.text.toString();
                          totalamt = int.parse(totalAmtCon.text.toString());
                          payType = _paymentType.toString();
                          bal = int.parse(balCon.text.toString());
@@ -299,9 +281,10 @@ bool borrowField = false;
 
                          print(name+date+desc+paid.toString()+bal.toString()+payType+totalamt.toString());*/
 
-                       }
-                      }
+                          }
+                        }
                     ),
+                  )
 
                 ],
               ),
@@ -313,30 +296,35 @@ bool borrowField = false;
     );
   }
 
-  void _showBal(String paid) {
+  void _showBal() {
     int totalAmt=0;
+    bal=0;
     if(_paymentType == "Borrow")
       {
-        if(paid.isEmpty || totalAmtCon.text.isEmpty)
+        if(paidCon.text.isEmpty || totalAmtCon.text.isEmpty)
         {
           borrowField= true;
         }
         else
         {
+
            totalAmt = int.parse(totalAmtCon.text.toString());
-           balCon.text=totalAmt.toString();
+           bal=totalAmt;
         }
 
       }
     else{
-      if(paid.isEmpty || totalAmtCon.text.isEmpty)
+      if(paidCon.text.isEmpty || totalAmtCon.text.isEmpty)
       {
        // error= true;
       }
       else
       {
-        totalAmt = int.parse(totalAmtCon.text.toString()) - int.parse(paid);
-        balCon.text=totalAmt.toString();
+        print(paidCon.text.toString()+"This is amount paid");
+        print(totalAmtCon.text.toString()+"This is total amount");
+        totalAmt = int.parse(totalAmtCon.text.toString()) - int.parse(paidCon.text.toString());
+        bal=totalAmt;
+        print(bal.toString()+"This is bal");
       }
 
     }
@@ -353,5 +341,22 @@ bool borrowField = false;
       {
         borrowField= false;
       }
+  }
+
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        dateTimeController.text = picked.toString();
+      });
+    }
+    else{
+     dateTimeController.text="";
+    }
   }
 }
