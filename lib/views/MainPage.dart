@@ -86,7 +86,7 @@ class _MainPageState extends State<MainPage> {
                 ),
                 onTap: (){
                   Navigator.pop(context);
-                  Navigator.pushNamed(context,MyRoutes.MarkAttanRoute);
+                  Navigator.pushNamed(context,MyRoutes.PaymentViewRoute);
                 },
               ),
               InkWell(

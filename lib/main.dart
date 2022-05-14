@@ -4,6 +4,7 @@ import 'package:story_app/views/attandance.dart';
 
 import 'package:story_app/views/mark_attandance.dart';
 import 'package:story_app/views/payment/payment_home.dart';
+import 'package:story_app/views/payment/payment_list_View.dart';
 
 import 'views/MainPage.dart';
 
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         MyRoutes.AttandanceRoute :(context) =>Attendence(),
         MyRoutes.MarkAttanRoute : (context)=> Mark_Attandance(),
         MyRoutes.PaymentMainRoute : (context)=> PaymentHome(),
+        MyRoutes.PaymentViewRoute :(context) => Payment_View(),
 
 
       },
